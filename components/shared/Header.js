@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Link from 'next/link';
 import {
     Collapse,
@@ -11,7 +10,7 @@ import {
 
 
 const BsNavLink = props => {
-    const { href, title } = props;
+    const {href, title} = props;
     return (
         <Link href={href}>
             <a className="nav-link port-navbar-link">{title}</a>
@@ -19,20 +18,21 @@ const BsNavLink = props => {
     )
 }
 
-const BsNavBrand = () =>
+const BsNavBrand = ({name}) =>
     <Link href="/">
-        <a className="navbar-brand port-navbar-brand">Filip Jerga</a>
+        <a className="navbar-brand port-navbar-brand">{name}</a>
     </Link>
 
 const LoginLink = () =>
-    <BsNavLink href="/api/v1/login" title={'login'}/>
+    <a className="navbar-brand port-navbar-brand" href="/api/v1/login" title={'login'}>Login</a>
 
 const LogoutLink = () =>
-    <BsNavLink href="/api/v1/logout" title={'logout'}/>
+    <a className="navbar-brand port-navbar-brand" href="/api/v1/logout" title={'logout'}>Logout</a>
 
-const Header = () => {
+const Header = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
+    const {data, loading, error} = props
 
     return (
         <div>
@@ -41,8 +41,8 @@ const Header = () => {
                 color="transparent"
                 dark
                 expand="md">
-                <BsNavBrand />
-                <NavbarToggler onClick={toggle} />
+                <BsNavBrand name={data ? data.name : "anonymous"}/>
+                <NavbarToggler onClick={toggle}/>
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="mr-auto" navbar>
                         <NavItem className="port-navbar-item">
@@ -60,14 +60,21 @@ const Header = () => {
                         <NavItem className="port-navbar-item">
                             <BsNavLink href="/cv" title="Cv"/>
                         </NavItem>
+                        <NavItem className="port-navbar-item">
+                            <BsNavLink href="/secretssr" title="SecretSSR"/>
+                        </NavItem>
                     </Nav>
                     <Nav navbar>
-                        <NavItem className="port-navbar-item">
-                            <LoginLink />
-                        </NavItem>
-                        <NavItem className="port-navbar-item">
-                            <LogoutLink />
-                        </NavItem>
+                        {
+                            data ?
+                            <NavItem className="port-navbar-item">
+                                <LogoutLink/>
+                            </NavItem>
+                            :
+                            <NavItem className="port-navbar-item">
+                                <LoginLink/>
+                            </NavItem>
+                        }
                     </Nav>
                 </Collapse>
             </Navbar>
