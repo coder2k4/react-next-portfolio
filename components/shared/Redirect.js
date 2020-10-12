@@ -15,3 +15,5 @@ const Redirect = ({to, ssr}) => {
 
     return null;
 }
+
+export default Redirect
